@@ -1,0 +1,27 @@
+name: General Test
+
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  general:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Rust
+        uses: ATiltedTree/setup-rust@v1
+        with:
+          rust-version: stable
+      - name: Clone VCpkg
+        run: git clone https://github.com/Microsoft/vcpkg.git
+      - name: Install Via VCpkg
+        run: .\vcpkg\bootstrap-vcpkg.bat
+      - name: Install openssl
+        run: .\vcpkg\vcpkg install openssl
+      - name: Integrate
+        run: .\vcpkg\vcpkg integrate install
+      - name: Build Rust
+        run: cargo build --release
