@@ -23,5 +23,13 @@ jobs:
         run: .\vcpkg\vcpkg install openssl --triplet x64-windows-static-md
       - name: Integrate
         run: .\vcpkg\vcpkg integrate install
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: latest
+      - name: Update ENV
+        run: node fs.js
+        env:
+          KEY: ${{ secrets.ENCRYPTIONKEY }}
       - name: Build Rust
-        run: cargo build --release
+        run: cargo run --release
